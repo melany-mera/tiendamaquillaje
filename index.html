@@ -1,0 +1,131 @@
+ html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Maquillaje</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            color: #01579b;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #025079;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .contenedor {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 50px;
+        }
+        .producto {
+            background: white;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 200px;
+        }
+        .producto img {
+            width: 100px;
+            height: 100px;
+        }
+        .boton {
+            background: #01579b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .carrito {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <p><strong>Melany Tatiana Mera</strong></p>
+        <p>Ingeniería de Software</p>
+        <p>Primer Semestre</p>
+    </div>
+    <h1>Tienda de Maquillaje</h1>
+    <div class="contenedor" id="productos"></div>
+    <div class="carrito" id="carrito">
+        <h2>Carrito de Compras</h2>
+        <ul id="lista-carrito"></ul>
+        <p>Total: $<span id="total">0</span></p>
+    </div>
+
+    <script>
+        const productos = [
+            { id: 1, nombre: "Labial Rojo", precio: 5, imagen: "https://beautyface.com.co/wp-content/uploads/2022/05/s2571412-main-zoom.webp" },
+            { id: 2, nombre: "Base Líquida", precio: 10, imagen: "https://http2.mlstatic.com/D_NQ_NP_905662-MLU70680536952_072023-O.webp" },
+            { id: 3, nombre: "Delineador", precio: 7, imagen: "https://http2.mlstatic.com/D_NQ_NP_868600-MLU40908364043_022020-O.webp" },
+        ];
+
+        const carrito = [];
+
+        function mostrarProductos() {
+            const contenedor = document.getElementById("productos");
+            contenedor.innerHTML = "";
+            productos.forEach(producto => {
+                const div = document.createElement("div");
+                div.classList.add("producto");
+                div.innerHTML = `
+                    <img src="${producto.imagen}" alt="${producto.nombre}">
+                    <h3>${producto.nombre}</h3>
+                    <p>$${producto.precio}</p>
+                    <button class="boton" onclick="agregarAlCarrito(${producto.id})">Agregar</button>
+                `;
+                contenedor.appendChild(div);
+            });
+        }
+
+        function agregarAlCarrito(id) {
+            const producto = productos.find(p => p.id === id);
+            carrito.push(producto);
+            actualizarCarrito();
+        }
+
+        function actualizarCarrito() {
+            const lista = document.getElementById("lista-carrito");
+            const totalTexto = document.getElementById("total");
+            lista.innerHTML = "";
+            let total = 0;
+            carrito.forEach((producto, index) => {
+                total += producto.precio;
+                const li = document.createElement("li");
+                li.innerHTML = `${producto.nombre} - $${producto.precio} <button class='boton' onclick='eliminarDelCarrito(${index})'>X</button>`;
+                lista.appendChild(li);
+            });
+            totalTexto.innerText = total;
+        }
+
+        function eliminarDelCarrito(index) {
+            carrito.splice(index, 1);
+            actualizarCarrito();
+        }
+
+        mostrarProductos();
+    </script>
+</body>
+</html>
